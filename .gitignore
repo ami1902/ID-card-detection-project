@@ -1,0 +1,6 @@
+API_model/
+Protoc/*
+Train/*
+Test/*
+Pre-trained_model/*
+Annotations/*
