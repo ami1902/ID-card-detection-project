@@ -11,9 +11,11 @@ from matplotlib import pyplot as plt
 # taken from: 
 # https://github.com/jakkcoder/Widows-Object-Detection-Setup/blob/main/object_detection_tutorial.ipynb
 wd = os.getcwd()
-MODEL_PATH = os.path.join(wd,'model_graph','new_graph','saved_model');
-LABELS_PATH = os.path.join(wd,'Annotations','label_map.pbtxt');
+#MODEL_PATH = os.path.join(wd,'model_graph','new_graph','saved_model');
+#LABELS_PATH = os.path.join(wd,'Annotations','label_map.pbtxt');
 
+MODEL_PATH = "" # add "model_graph" path from the drive
+LABELS_PATH = "" # add the "Annotations" folder path 
 
 # load the trained model onto memory
 detection_model = tf.saved_model.load(MODEL_PATH)
@@ -79,11 +81,13 @@ def show_inference(model,image_np):
 # cv2.destroyAllWindows()
 
 
-img_path = [os.path.join(wd,"Test","IMG22.jpg"),
-            os.path.join(wd,"Test","IMG15.jpg"),
-            os.path.join(wd,"Test","IMG14.jpg")
+#img_path = [os.path.join(wd,"Test","IMG22.jpg"),
+#            os.path.join(wd,"Test","IMG15.jpg"),
+#            os.path.join(wd,"Test","IMG14.jpg")
             
-            ]
+#            ]
+img_path = [] # add all your image path here Example : "E:\Train\IMG22.jpg"
+            
 i = 0
 for p in img_path:
     i += 1
