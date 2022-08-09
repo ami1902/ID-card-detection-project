@@ -17,20 +17,20 @@ wd = os.getcwd();
 custom_model_name = 'my_faster_rcnn';
 
 #for local training
-# paths = {
-#         'pre_trained_model' : os.path.join(wd, "Pre-trained_model"),
-#         'train_img_path' : os.path.join(wd,"Train"),
-#         'test_img_path' : os.path.join(wd,"Test"),
-#         'protoc_path' : os.path.join(wd,"Protoc"),
-#         'annotation_path' : os.path.join(wd,'Annotations'),
-#         'final_model_path' : os.path.join(wd,"Trained_model"),
-#         'api_model_path' : os.path.join(wd,"API_model")
-#     };
-
 paths = {
-    'annotation_path' : os.path.join(wd,'Annotations'),
-    'final_model_path' : os.path.join(wd,"Trained_model"),
-    }
+        'pre_trained_model' : os.path.join(wd, "Pre-trained_model"),
+        'train_img_path' : os.path.join(wd,"Train"),
+        'test_img_path' : os.path.join(wd,"Test"),
+        'protoc_path' : os.path.join(wd,"Protoc"),
+        'annotation_path' : os.path.join(wd,'Annotations'),
+        'final_model_path' : os.path.join(wd,"Trained_model"),
+        'api_model_path' : os.path.join(wd,"API_model")
+    };
+
+# paths = {
+#     'annotation_path' : os.path.join(wd,'Annotations'),
+#     'final_model_path' : os.path.join(wd,"Trained_model"),
+#     }
 
 files = {
     'pipeline' : os.path.join(paths['final_model_path'],custom_model_name,'pipeline.config'),
@@ -38,14 +38,14 @@ files = {
 
 # will go through each of the paths in 'paths' dictonary
 # and create a folder for it
-# def makeDir(): 
-#     for p in paths:
-#         path = paths[p]
-#         f_path = f'"{path}"';
-#         if not os.path.exists(path):
-#             print(f_path)
-#             if os.name == 'nt':
-#                 os.system('mkdir '+f_path)
+def makeDir(): 
+    for p in paths:
+        path = paths[p]
+        f_path = f'"{path}"';
+        if not os.path.exists(path):
+            print(f_path)
+            if os.name == 'nt':
+                os.system('mkdir '+f_path)
         
 #creates a label_map.pbtxt file
 # the structure of label map is 
@@ -218,38 +218,38 @@ def generateTFRecord():
     
 
 
-def update_pipline_config():
-    # config = config_util.get_configs_from_pipeline_file(files['pipeline']);
-    pipeline_config = pipeline_pb2.TrainEvalPipelineConfig();
+# def update_pipline_config():
+#     # config = config_util.get_configs_from_pipeline_file(files['pipeline']);
+#     pipeline_config = pipeline_pb2.TrainEvalPipelineConfig();
     
-    with tf.io.gfile.GFile(files['pipeline'],"r") as f:
-        p_str = f.read()
-        text_format.Merge(p_str, pipeline_config);
+#     with tf.io.gfile.GFile(files['pipeline'],"r") as f:
+#         p_str = f.read()
+#         text_format.Merge(p_str, pipeline_config);
     
-    pipeline_config.model.faster_rcnn.num_classes = 1;
-    pipeline_config.train_config.batch_size = 4;
-    #local training
-    # pipeline_config.train_config.fine_tune_checkpoint = os.path.join(paths['pre_trained_model'],
-    #                                                                  'checkpoint',
-    #                                                                  'ckpt-0')
-    pipeline_config.train_config.fine_tune_checkpoint = "Pre-trained_model/checkpoint/cktp-0"
-    pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
-    #local training
-    # pipeline_config.train_input_reader.label_map_path = os.path.join(paths['annotation_path'],'labelmap.pbtxt')
-    # pipeline_config.train_input_reader.tf_record_input_reader.input_path[:] = [os.path.join(paths['annotation_path'],'train.record')];
-    # pipeline_config.eval_input_reader[0].label_map_path = os.path.join(paths['annotation_path'],'labelmap.pbtxt')
-    # pipeline_config.eval_input_reader[0].tf_record_input_reader.input_path[:] = [os.path.join(paths['annotation_path'],'test.record')];
-    pipeline_config.train_input_reader.label_map_path = "Annotations/label_map.pbtxt"
-    pipeline_config.train_input_reader.tf_record_input_reader.input_path[:] = ["Annotations/train.record"]
-    pipeline_config.eval_input_reader[0].label_map_path = "Annotations/label_map.pbtxt"
-    pipeline_config.eval_input_reader[0].tf_record_input_reader.input_path[:] = ["Annotations/test.record"]
+#     pipeline_config.model.faster_rcnn.num_classes = 1;
+#     pipeline_config.train_config.batch_size = 4;
+#     #local training
+#     # pipeline_config.train_config.fine_tune_checkpoint = os.path.join(paths['pre_trained_model'],
+#     #                                                                  'checkpoint',
+#     #                                                                  'ckpt-0')
+#     pipeline_config.train_config.fine_tune_checkpoint = "Pre-trained_model/checkpoint/cktp-0"
+#     pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
+#     #local training
+#     # pipeline_config.train_input_reader.label_map_path = os.path.join(paths['annotation_path'],'labelmap.pbtxt')
+#     # pipeline_config.train_input_reader.tf_record_input_reader.input_path[:] = [os.path.join(paths['annotation_path'],'train.record')];
+#     # pipeline_config.eval_input_reader[0].label_map_path = os.path.join(paths['annotation_path'],'labelmap.pbtxt')
+#     # pipeline_config.eval_input_reader[0].tf_record_input_reader.input_path[:] = [os.path.join(paths['annotation_path'],'test.record')];
+#     pipeline_config.train_input_reader.label_map_path = "Annotations/label_map.pbtxt"
+#     pipeline_config.train_input_reader.tf_record_input_reader.input_path[:] = ["Annotations/train.record"]
+#     pipeline_config.eval_input_reader[0].label_map_path = "Annotations/label_map.pbtxt"
+#     pipeline_config.eval_input_reader[0].tf_record_input_reader.input_path[:] = ["Annotations/test.record"]
     
-    cfg_text = text_format.MessageToString(pipeline_config);
+#     cfg_text = text_format.MessageToString(pipeline_config);
    
-    with tf.io.gfile.GFile(files['pipeline'],"wb") as f:
-        f.write(cfg_text)
+#     with tf.io.gfile.GFile(files['pipeline'],"wb") as f:
+#         f.write(cfg_text)
       
-    print("Config updated sucessfully");
+#     print("Config updated sucessfully");
     
     
     
@@ -268,12 +268,12 @@ def print_eval_command():
     print(command);
 
 if __name__ == '__main__':
+    makeDir();
+    createLabelMap()
+    convert_df_to_csv()
+    generateTFRecord();
     print_train_command();
     print_eval_command();
-    # makeDir();
-    # createLabelMap()
-    # convert_df_to_csv()
-    # generateTFRecord();
     #update_pipline_config();
 
     
